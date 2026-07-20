@@ -14,9 +14,14 @@ router = APIRouter()
 MFG = Namespace("http://example.org/manufacturing/")
 PROV = Namespace("http://www.w3.org/ns/prov#")
 
+from typing import List, Optional
+
 @router.get("/", response_model=List[ExtractedEntityResponse])
-def list_entities(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
-    return db.query(ExtractedEntity).offset(skip).limit(limit).all()
+def list_entities(skip: int = 0, limit: int = 100, status: Optional[str] = None, db: Session = Depends(get_db)):
+    query = db.query(ExtractedEntity)
+    if status:
+        query = query.filter(ExtractedEntity.status == status.upper())
+    return query.offset(skip).limit(limit).all()
 
 @router.get("/{entity_id}", response_model=ExtractedEntityResponse)
 def get_entity(entity_id: str, db: Session = Depends(get_db)):
