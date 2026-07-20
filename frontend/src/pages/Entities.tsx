@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Check, X } from 'lucide-react';
 import { fetchEntities, approveEntity, rejectEntity } from '../services/api';
-import { ExtractedEntity } from '../types';
+import type { ExtractedEntity } from '../types';
 
 export default function Entities() {
   const [entities, setEntities] = useState<ExtractedEntity[]>([]);

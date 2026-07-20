@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { UploadCloud } from 'lucide-react';
 import { fetchDocuments, uploadDocument } from '../services/api';
-import { Document } from '../types';
+import type { Document } from '../types';
 
 export default function Documents() {
   const [documents, setDocuments] = useState<Document[]>([]);
