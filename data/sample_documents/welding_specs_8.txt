@@ -1,0 +1,3 @@
+Document ID: 8
+The welding machine consumes stainless steel and operates at 1200 degrees Celsius.
+The welding process uses a laser.

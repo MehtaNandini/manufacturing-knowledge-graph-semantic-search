@@ -1,0 +1,4 @@
+Document ID: 6
+Maintenance Action: Replaced spindle bearings on CNC milling machine due to excessive vibration.
+The process duration was 2.5 hours. Bearing wear caused excessive vibration.
+A vibration sensor monitors the conveyor motor.

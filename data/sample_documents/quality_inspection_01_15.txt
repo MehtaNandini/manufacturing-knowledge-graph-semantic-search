@@ -1,0 +1,3 @@
+Document ID: 15
+Surface defect detected on aluminum casing. The defect was caused by a dull carbide cutting tool in the lathe.
+Measurement: 5 mm deviation.

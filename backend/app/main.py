@@ -3,7 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 import time
 from uuid import uuid4
 from .api.endpoints import auth, documents, entities, relationships, graph, search, ontology, quality
+from .database.session import engine
+from .models import domain
+from .models.base import Base
 
+# Create database tables
+Base.metadata.create_all(bind=engine)
 # Setup basic FastAPI app
 app = FastAPI(
     title="Manufacturing Knowledge Graph API",
