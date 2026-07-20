@@ -1,34 +1,58 @@
-
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, NavLink } from 'react-router-dom';
+import { Database, FileText, Search, Activity, Network } from 'lucide-react';
 import './index.css';
 
-// Minimal mock pages for scaffold
-const Dashboard = () => (
-  <div style={{ padding: '20px' }}>
-    <h2>Dashboard</h2>
-    <p>Welcome to the Manufacturing Knowledge Graph</p>
-  </div>
-);
-const Documents = () => <div style={{ padding: '20px' }}><h2>Documents</h2></div>;
-const Entities = () => <div style={{ padding: '20px' }}><h2>Entities</h2></div>;
-const GraphExplorer = () => <div style={{ padding: '20px' }}><h2>Graph Explorer</h2></div>;
-const SemanticSearch = () => <div style={{ padding: '20px' }}><h2>Semantic Search</h2></div>;
+import Dashboard from './pages/Dashboard';
+import Documents from './pages/Documents';
+import Entities from './pages/Entities';
+import GraphExplorer from './pages/GraphExplorer';
+import SemanticSearch from './pages/SemanticSearch';
 
 function App() {
   return (
     <Router>
-      <div style={{ display: 'flex', minHeight: '100vh', fontFamily: 'sans-serif' }}>
-        <nav style={{ width: '250px', background: '#1e293b', color: 'white', padding: '20px' }}>
-          <h1 style={{ fontSize: '1.2rem', marginBottom: '2rem' }}>Mfg KG Platform</h1>
-          <ul style={{ listStyle: 'none', padding: 0, display: 'flex', flexDirection: 'column', gap: '15px' }}>
-            <li><Link to="/" style={{ color: 'white', textDecoration: 'none' }}>Dashboard</Link></li>
-            <li><Link to="/documents" style={{ color: 'white', textDecoration: 'none' }}>Documents</Link></li>
-            <li><Link to="/entities" style={{ color: 'white', textDecoration: 'none' }}>Review Workflow</Link></li>
-            <li><Link to="/graph" style={{ color: 'white', textDecoration: 'none' }}>Graph Explorer</Link></li>
-            <li><Link to="/search" style={{ color: 'white', textDecoration: 'none' }}>Semantic Search</Link></li>
+      <div className="app-container">
+        <nav className="sidebar">
+          <div className="sidebar-title">
+            <Database size={24} color="#3b82f6" />
+            <span>Mfg KG Platform</span>
+          </div>
+          
+          <ul className="nav-menu">
+            <li>
+              <NavLink to="/" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                <Activity size={20} />
+                Dashboard
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/documents" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                <FileText size={20} />
+                Documents
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/entities" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                <Database size={20} />
+                Review Workflow
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/graph" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                <Network size={20} />
+                Graph Explorer
+              </NavLink>
+            </li>
+            <li>
+              <NavLink to="/search" className={({isActive}) => isActive ? "nav-item active" : "nav-item"}>
+                <Search size={20} />
+                Semantic Search
+              </NavLink>
+            </li>
           </ul>
         </nav>
-        <main style={{ flex: 1, background: '#f8fafc' }}>
+        
+        <main className="main-content">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/documents" element={<Documents />} />
