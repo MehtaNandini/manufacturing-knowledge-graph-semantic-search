@@ -45,7 +45,7 @@ def process_document_task(file_path: str, mime_type: str, document_id: str):
                     confidence=ent["confidence"],
                     evidence_text=ent["evidence_text"],
                     page_number=ent["page_number"],
-                    status="pending"
+                    status="PENDING"
                 )
                 db.add(db_ent)
         
