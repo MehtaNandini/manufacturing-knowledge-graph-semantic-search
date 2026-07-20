@@ -85,7 +85,7 @@ export default function Entities() {
                   </span>
                 </td>
                 <td>
-                  {ent.status === 'pending' && (
+                  {ent.status.toLowerCase() === 'pending' && (
                     <div className="flex gap-2">
                       <button className="btn btn-success" onClick={() => handleAction(ent.id, 'approve')} title="Approve & Publish to KG"><Check size={16} /></button>
                       <button className="btn btn-danger" onClick={() => handleAction(ent.id, 'reject')} title="Reject"><X size={16} /></button>
