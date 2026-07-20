@@ -37,12 +37,9 @@ class FusekiClient:
         ntriples = graph.serialize(format="nt")
         if not ntriples:
             return
-        # Use httpx to upload data
-        auth = ("admin", ADMIN_PASSWORD)
-        headers = {"Content-Type": "application/n-triples"}
-        response = httpx.post(FUSEKI_DATA_URL, content=ntriples.encode('utf-8'), headers=headers, auth=auth, timeout=30.0)
-        if response.status_code not in (200, 201, 204):
-            raise Exception(f"Failed to insert graph: {response.text}")
+        # Use SPARQL UPDATE to insert data
+        update_query = f"INSERT DATA {{ {ntriples} }}"
+        self.update(update_query)
             
     def get_statistics(self):
         query = """
