@@ -51,7 +51,7 @@ export const semanticSearch = async (query: string): Promise<SearchResult[]> => 
 };
 
 export const sparqlQuery = async (query: string): Promise<any> => {
-  const { data } = await api.post('/api/graph/query', { query });
+  const { data } = await api.post('/api/graph/sparql', { query });
   return data;
 };
 
@@ -66,6 +66,6 @@ export const fetchGraphSchema = async (): Promise<any> => {
     }
     LIMIT 200
   `;
-  const { data } = await api.post('/api/graph/query', { query });
+  const { data } = await api.post('/api/graph/sparql', { query });
   return data;
 };
