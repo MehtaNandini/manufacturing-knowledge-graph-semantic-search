@@ -1,0 +1,258 @@
+@prefix : <http://example.org/manufacturing/> .
+@prefix mfg: <http://example.org/manufacturing/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix qudt: <http://qudt.org/schema/qudt/> .
+@prefix unit: <http://qudt.org/vocab/unit/> .
+@prefix bfo: <http://purl.obolibrary.org/obo/BFO_> .
+@prefix iof: <https://spec.industrialontologies.org/ontology/core/Core/> .
+
+<http://example.org/manufacturing/> rdf:type owl:Ontology ;
+    owl:versionInfo "1.0.0" ;
+    rdfs:label "Core Manufacturing Ontology" ;
+    rdfs:comment "A lightweight ontology for manufacturing knowledge management aligned with BFO, IOF Core, and QUDT." ;
+    <http://purl.org/dc/terms/creator> "Manufacturing Platform" ;
+    <http://purl.org/dc/terms/created> "2023-10-25"^^xsd:date ;
+    <http://purl.org/dc/terms/license> <https://opensource.org/licenses/MIT> .
+
+# --- Classes ---
+mfg:ManufacturingEntity rdf:type owl:Class ;
+    rdfs:label "Manufacturing Entity" ;
+    rdfs:subClassOf bfo:0000001 . # BFO: Entity
+
+mfg:ManufacturingProcess rdf:type owl:Class ;
+    rdfs:label "Manufacturing Process" ;
+    rdfs:subClassOf mfg:ManufacturingEntity, bfo:0000015 . # BFO: Process
+
+mfg:Machine rdf:type owl:Class ;
+    rdfs:label "Machine" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:MachineComponent rdf:type owl:Class ;
+    rdfs:label "Machine Component" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:ProductionLine rdf:type owl:Class ;
+    rdfs:label "Production Line" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Product rdf:type owl:Class ;
+    rdfs:label "Product" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Material rdf:type owl:Class ;
+    rdfs:label "Material" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Tool rdf:type owl:Class ;
+    rdfs:label "Tool" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Sensor rdf:type owl:Class ;
+    rdfs:label "Sensor" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Measurement rdf:type owl:Class ;
+    rdfs:label "Measurement" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Quantity rdf:type owl:Class ;
+    rdfs:label "Quantity" ;
+    rdfs:subClassOf qudt:Quantity .
+
+mfg:QualityIssue rdf:type owl:Class ;
+    rdfs:label "Quality Issue" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Defect rdf:type owl:Class ;
+    rdfs:label "Defect" ;
+    rdfs:subClassOf mfg:QualityIssue .
+
+mfg:FailureMode rdf:type owl:Class ;
+    rdfs:label "Failure Mode" ;
+    rdfs:subClassOf mfg:QualityIssue .
+
+mfg:MaintenanceAction rdf:type owl:Class ;
+    rdfs:label "Maintenance Action" ;
+    rdfs:subClassOf mfg:ManufacturingProcess .
+
+mfg:WorkerRole rdf:type owl:Class ;
+    rdfs:label "Worker Role" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:Organization rdf:type owl:Class ;
+    rdfs:label "Organization" ;
+    rdfs:subClassOf prov:Organization, mfg:ManufacturingEntity .
+
+mfg:Document rdf:type owl:Class ;
+    rdfs:label "Document" ;
+    rdfs:subClassOf prov:Entity, mfg:ManufacturingEntity .
+
+mfg:Publication rdf:type owl:Class ;
+    rdfs:label "Publication" ;
+    rdfs:subClassOf mfg:Document .
+
+mfg:Standard rdf:type owl:Class ;
+    rdfs:label "Standard" ;
+    rdfs:subClassOf mfg:Document .
+
+mfg:SafetyRequirement rdf:type owl:Class ;
+    rdfs:label "Safety Requirement" ;
+    rdfs:subClassOf mfg:ManufacturingEntity .
+
+mfg:EnergyConsumption rdf:type owl:Class ;
+    rdfs:label "Energy Consumption" ;
+    rdfs:subClassOf mfg:Measurement .
+
+mfg:ProductionEvent rdf:type owl:Class ;
+    rdfs:label "Production Event" ;
+    rdfs:subClassOf mfg:ManufacturingProcess .
+
+# --- Object Properties ---
+mfg:usesMachine rdf:type owl:ObjectProperty ;
+    rdfs:label "uses machine" ;
+    rdfs:domain mfg:ManufacturingProcess ;
+    rdfs:range mfg:Machine .
+
+mfg:usesTool rdf:type owl:ObjectProperty ;
+    rdfs:label "uses tool" ;
+    rdfs:domain mfg:ManufacturingProcess ;
+    rdfs:range mfg:Tool .
+
+mfg:consumesMaterial rdf:type owl:ObjectProperty ;
+    rdfs:label "consumes material" ;
+    rdfs:domain mfg:ManufacturingProcess ;
+    rdfs:range mfg:Material .
+
+mfg:producesProduct rdf:type owl:ObjectProperty ;
+    rdfs:label "produces product" ;
+    rdfs:domain mfg:ManufacturingProcess ;
+    rdfs:range mfg:Product .
+
+mfg:containsComponent rdf:type owl:ObjectProperty ;
+    rdfs:label "contains component" ;
+    rdfs:domain mfg:Machine ;
+    rdfs:range mfg:MachineComponent .
+
+mfg:partOfProductionLine rdf:type owl:ObjectProperty ;
+    rdfs:label "part of production line" ;
+    rdfs:domain mfg:Machine ;
+    rdfs:range mfg:ProductionLine .
+
+mfg:monitoredBy rdf:type owl:ObjectProperty ;
+    rdfs:label "monitored by" ;
+    rdfs:range mfg:Sensor .
+
+mfg:hasMeasurement rdf:type owl:ObjectProperty ;
+    rdfs:label "has measurement" ;
+    rdfs:range mfg:Measurement .
+
+mfg:hasQuantity rdf:type owl:ObjectProperty ;
+    rdfs:label "has quantity" ;
+    rdfs:range mfg:Quantity .
+
+mfg:hasFailureMode rdf:type owl:ObjectProperty ;
+    rdfs:label "has failure mode" ;
+    rdfs:range mfg:FailureMode .
+
+mfg:causesDefect rdf:type owl:ObjectProperty ;
+    rdfs:label "causes defect" ;
+    rdfs:domain mfg:FailureMode ;
+    rdfs:range mfg:Defect .
+
+mfg:mitigatedBy rdf:type owl:ObjectProperty ;
+    rdfs:label "mitigated by" ;
+    rdfs:range mfg:MaintenanceAction .
+
+mfg:requiresMaintenanceAction rdf:type owl:ObjectProperty ;
+    rdfs:label "requires maintenance action" ;
+    rdfs:range mfg:MaintenanceAction .
+
+mfg:conformsToStandard rdf:type owl:ObjectProperty ;
+    rdfs:label "conforms to standard" ;
+    rdfs:range mfg:Standard .
+
+mfg:hasSafetyRequirement rdf:type owl:ObjectProperty ;
+    rdfs:label "has safety requirement" ;
+    rdfs:range mfg:SafetyRequirement .
+
+mfg:describedIn rdf:type owl:ObjectProperty ;
+    rdfs:label "described in" ;
+    rdfs:range mfg:Document .
+
+mfg:derivedFrom rdf:type owl:ObjectProperty ;
+    rdfs:label "derived from" ;
+    rdfs:subPropertyOf prov:wasDerivedFrom .
+
+mfg:relatedToProcess rdf:type owl:ObjectProperty ;
+    rdfs:label "related to process" ;
+    rdfs:range mfg:ManufacturingProcess .
+
+mfg:relatedToMachine rdf:type owl:ObjectProperty ;
+    rdfs:label "related to machine" ;
+    rdfs:range mfg:Machine .
+
+mfg:performedBy rdf:type owl:ObjectProperty ;
+    rdfs:label "performed by" ;
+    rdfs:range mfg:WorkerRole .
+
+mfg:hasUnit rdf:type owl:ObjectProperty ;
+    rdfs:label "has unit" ;
+    rdfs:domain mfg:Measurement ;
+    rdfs:range qudt:Unit .
+
+# --- Data Properties ---
+mfg:entityLabel rdf:type owl:DatatypeProperty ;
+    rdfs:label "entity label" ;
+    rdfs:range xsd:string .
+
+mfg:description rdf:type owl:DatatypeProperty ;
+    rdfs:label "description" ;
+    rdfs:range xsd:string .
+
+mfg:documentTitle rdf:type owl:DatatypeProperty ;
+    rdfs:label "document title" ;
+    rdfs:range xsd:string .
+
+mfg:documentPage rdf:type owl:DatatypeProperty ;
+    rdfs:label "document page" ;
+    rdfs:range xsd:integer .
+
+mfg:sourceFile rdf:type owl:DatatypeProperty ;
+    rdfs:label "source file" ;
+    rdfs:range xsd:string .
+
+mfg:confidenceScore rdf:type owl:DatatypeProperty ;
+    rdfs:label "confidence score" ;
+    rdfs:range xsd:float .
+
+mfg:measurementValue rdf:type owl:DatatypeProperty ;
+    rdfs:label "measurement value" ;
+    rdfs:range xsd:float .
+
+mfg:timestamp rdf:type owl:DatatypeProperty ;
+    rdfs:label "timestamp" ;
+    rdfs:range xsd:dateTime .
+
+mfg:manufacturer rdf:type owl:DatatypeProperty ;
+    rdfs:label "manufacturer" ;
+    rdfs:range xsd:string .
+
+mfg:modelNumber rdf:type owl:DatatypeProperty ;
+    rdfs:label "model number" ;
+    rdfs:range xsd:string .
+
+mfg:processDuration rdf:type owl:DatatypeProperty ;
+    rdfs:label "process duration" ;
+    rdfs:range xsd:float .
+
+mfg:energyValue rdf:type owl:DatatypeProperty ;
+    rdfs:label "energy value" ;
+    rdfs:range xsd:float .
+
+mfg:createdAt rdf:type owl:DatatypeProperty ;
+    rdfs:label "created at" ;
+    rdfs:range xsd:dateTime .

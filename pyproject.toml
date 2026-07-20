@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "manufacturing-knowledge-graph-semantic-search"
+version = "0.1.0"
+description = "Manufacturing Knowledge Graph and Semantic Search Platform"
+authors = ["Author <author@example.com>"]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+exclude = [
+    ".git",
+    "__pycache__",
+    "venv",
+    ".venv",
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = "--cov=app --cov-report=term-missing"
+testpaths = [
+    "tests",
+]
+asyncio_mode = "auto"

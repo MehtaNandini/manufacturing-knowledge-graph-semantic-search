@@ -1,0 +1,71 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix mfg: <http://example.org/manufacturing/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+mfg:EntityShape
+    a sh:NodeShape ;
+    sh:targetClass mfg:ManufacturingEntity ;
+    sh:property [
+        sh:path mfg:entityLabel ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Every entity must have at least one entityLabel." ;
+    ] ;
+    sh:property [
+        sh:path mfg:describedIn ;
+        sh:minCount 1 ;
+        sh:class mfg:Document ;
+        sh:message "Every entity must have source provenance (describedIn)." ;
+    ] ;
+    sh:property [
+        sh:path mfg:confidenceScore ;
+        sh:datatype xsd:float ;
+        sh:minInclusive 0.0 ;
+        sh:maxInclusive 1.0 ;
+        sh:message "Confidence score must be between 0 and 1." ;
+    ] .
+
+mfg:MeasurementShape
+    a sh:NodeShape ;
+    sh:targetClass mfg:Measurement ;
+    sh:property [
+        sh:path mfg:measurementValue ;
+        sh:minCount 1 ;
+        sh:datatype xsd:float ;
+        sh:message "Every measurement must have a measurementValue." ;
+    ] ;
+    sh:property [
+        sh:path mfg:hasUnit ;
+        sh:minCount 1 ;
+        sh:message "Every measurement must specify a unit." ;
+    ] .
+
+mfg:ProcessShape
+    a sh:NodeShape ;
+    sh:targetClass mfg:ManufacturingProcess ;
+    sh:property [
+        sh:path mfg:usesMachine ;
+        sh:class mfg:Machine ;
+        sh:message "A process usesMachine must link to a Machine." ;
+    ] .
+
+mfg:ProductionEventShape
+    a sh:NodeShape ;
+    sh:targetClass mfg:ProductionEvent ;
+    sh:property [
+        sh:path mfg:timestamp ;
+        sh:minCount 1 ;
+        sh:datatype xsd:dateTime ;
+        sh:message "Production Event must have a timestamp." ;
+    ] .
+
+mfg:QualityIssueShape
+    a sh:NodeShape ;
+    sh:targetClass mfg:QualityIssue ;
+    sh:property [
+        sh:path mfg:description ;
+        sh:minCount 1 ;
+        sh:datatype xsd:string ;
+        sh:message "Defects and Failure Modes must have a description." ;
+    ] .
