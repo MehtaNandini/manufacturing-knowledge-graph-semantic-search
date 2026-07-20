@@ -23,7 +23,7 @@ services:
       - POSTGRES_DB=manufacturing_kg
       - QDRANT_HOST=qdrant
       - QDRANT_PORT=6333
-      - FUSEKI_URL=http://fuseki:3030/manufacturing
+      - FUSEKI_URL=http://fuseki:3030/ds
       - JWT_SECRET=supersecretjwtkeythatshouldbechangedinprod
     depends_on:
       - db
