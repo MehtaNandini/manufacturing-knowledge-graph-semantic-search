@@ -53,9 +53,10 @@ services:
     image: secoresearch/fuseki
     ports:
       - "3030:3030"
-    command: --update --loc=/fuseki/databases/ds /ds
     environment:
       - ADMIN_PASSWORD=admin
+      - ENABLE_UPDATE=true
+      - ENABLE_DATA_WRITE=true
     volumes:
       - fuseki_data:/fuseki
 
