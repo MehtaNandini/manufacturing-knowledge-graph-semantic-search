@@ -5,7 +5,7 @@ import httpx
 
 FUSEKI_URL = os.getenv("FUSEKI_URL", "http://localhost:3030/manufacturing")
 FUSEKI_UPDATE_URL = f"{FUSEKI_URL}/update"
-FUSEKI_QUERY_URL = f"{FUSEKI_URL}/query"
+FUSEKI_QUERY_URL = f"{FUSEKI_URL}/sparql"
 FUSEKI_DATA_URL = f"{FUSEKI_URL}/data"
 ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "admin")
 
