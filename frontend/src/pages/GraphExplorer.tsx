@@ -13,26 +13,39 @@ export default function GraphExplorer() {
   const loadGraph = async () => {
     try {
       const result = await fetchGraphSchema();
-      // result from fuseki usually is in { results: { bindings: [...] } } format
       const bindings = result.results?.bindings || [];
       
       const nodesMap = new Map();
       const edges: any[] = [];
+      const labelsMap = new Map();
+      
+      // First pass: extract labels
+      bindings.forEach((b: any) => {
+        const p = b.p.value;
+        if (p.endsWith('entityLabel') || p.endsWith('label')) {
+          labelsMap.set(b.s.value, b.o.value);
+        }
+      });
       
       bindings.forEach((b: any) => {
         const s = b.s.value;
         const p = b.p.value;
         const o = b.o.value;
 
+        // Skip entityLabel edge to reduce clutter
+        if (p.endsWith('entityLabel') || p.endsWith('label')) return;
+
         // Add Subject Node
         if (!nodesMap.has(s)) {
-          nodesMap.set(s, { data: { id: s, label: s.split('/').pop() || s } });
+          const defaultLabel = s.split('/').pop() || s;
+          nodesMap.set(s, { data: { id: s, label: labelsMap.get(s) || defaultLabel } });
         }
         
         // Add Object Node if it's a URI
         if (b.o.type === 'uri') {
           if (!nodesMap.has(o)) {
-            nodesMap.set(o, { data: { id: o, label: o.split('/').pop() || o } });
+            const defaultLabel = o.split('/').pop() || o;
+            nodesMap.set(o, { data: { id: o, label: labelsMap.get(o) || defaultLabel } });
           }
           // Add Edge
           edges.push({ data: { source: s, target: o, label: p.split('#').pop()?.split('/').pop() || p } });
@@ -90,9 +103,14 @@ export default function GraphExplorer() {
       selector: 'node[type="literal"]',
       style: {
         'background-color': '#10b981',
-        'shape': 'rectangle',
-        'width': '60px',
-        'height': '20px',
+        'shape': 'round-rectangle',
+        'width': 'label',
+        'height': 'label',
+        'padding': '6px',
+        'color': '#ffffff',
+        'text-valign': 'center',
+        'text-halign': 'center',
+        'text-margin-y': '0px',
       }
     },
     {
@@ -105,9 +123,11 @@ export default function GraphExplorer() {
         'curve-style': 'bezier',
         'label': 'data(label)',
         'font-size': '10px',
-        'color': '#64748b',
+        'color': '#475569',
         'text-rotation': 'autorotate',
-        'text-margin-y': '-10px'
+        'text-background-opacity': 1,
+        'text-background-color': '#ffffff',
+        'text-background-padding': '2px',
       }
     }
   ];
