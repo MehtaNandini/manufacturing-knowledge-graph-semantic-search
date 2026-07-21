@@ -13,13 +13,14 @@ RUN npm run build
 FROM nginx:alpine
 
 COPY --from=build /app/dist /usr/share/nginx/html
-# Copy custom nginx config if necessary for client-side routing
+# Configure nginx to serve the SPA and disable caching for index.html so updates are immediate
 RUN echo 'server { \
     listen 80; \
     location / { \
         root   /usr/share/nginx/html; \
         index  index.html index.htm; \
         try_files $uri $uri/ /index.html; \
+        add_header Cache-Control "no-store, no-cache, must-revalidate"; \
     } \
 }' > /etc/nginx/conf.d/default.conf
 
