@@ -50,13 +50,12 @@ services:
       - qdrant_data:/qdrant/storage
 
   fuseki:
-    image: secoresearch/fuseki
+    image: stain/jena-fuseki
     ports:
       - "3030:3030"
     environment:
       - ADMIN_PASSWORD=admin
-      - ENABLE_UPDATE=true
-      - ENABLE_DATA_WRITE=true
+      - FUSEKI_DATASET_1=ds
     volumes:
       - fuseki_data:/fuseki
 
