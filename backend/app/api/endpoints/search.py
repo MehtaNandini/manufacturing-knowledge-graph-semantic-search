@@ -35,6 +35,10 @@ def semantic_search(request: SearchRequest, db: Session = Depends(get_db)):
         from ...models.domain import Document
         
         for hit in hits:
+            # Filter out irrelevant results with very low cosine similarity
+            if hit.score < 0.2:
+                continue
+
             payload = hit.payload or {}
             doc_id = payload.get("document_id", "")
             
