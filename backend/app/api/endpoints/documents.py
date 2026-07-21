@@ -29,7 +29,11 @@ def process_document_task(file_path: str, mime_type: str, document_id: str):
                 vector_client.insert_chunk(
                     chunk_id=chunk["id"], 
                     text=chunk["text"], 
-                    payload={"document_id": document_id, "page_number": chunk["page_number"]}
+                    payload={
+                        "document_id": document_id, 
+                        "page_number": chunk["page_number"],
+                        "text": chunk["text"]
+                    }
                 )
             except Exception as e:
                 print(f"Failed to insert chunk to Qdrant: {e}")

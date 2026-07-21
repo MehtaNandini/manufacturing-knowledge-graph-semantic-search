@@ -20,20 +20,35 @@ class SearchResult(BaseModel):
     page_number: int
 
 @router.post("/semantic", response_model=List[SearchResult])
-def semantic_search(request: SearchRequest):
+def semantic_search(request: SearchRequest, db: Session = Depends(get_db)):
     if not request.query.strip():
         raise HTTPException(status_code=400, detail="Empty query")
         
     try:
-        hits = vector_client.search(request.query, limit=request.limit)
+        hits = vector_client.client.query_points(
+            collection_name="manufacturing_chunks",
+            query=vector_client.encode(request.query),
+            limit=request.limit,
+        ).points
+        
         results = []
+        from ...models.domain import Document
+        
         for hit in hits:
-            # Assuming payload contains text, document_id, page_number
             payload = hit.payload or {}
+            doc_id = payload.get("document_id", "")
+            
+            # Fetch human-readable document name
+            doc_name = doc_id
+            if doc_id:
+                doc = db.query(Document).filter(Document.id == doc_id).first()
+                if doc:
+                    doc_name = doc.filename
+
             results.append(SearchResult(
-                text=payload.get("text", ""),
+                text=payload.get("text", "Text chunk missing from payload. Please re-upload this document."),
                 score=hit.score,
-                document_id=payload.get("document_id", ""),
+                document_id=doc_name, # Overwrite with filename for UI
                 page_number=payload.get("page_number", 1)
             ))
         return results
