@@ -37,12 +37,12 @@ class VectorSearchClient:
         vector = self.encode(query_text)
         # We can construct Qdrant filters based on `filters` dictionary if needed
         # For now, simple vector search
-        hits = self.client.search(
+        response = self.client.query_points(
             collection_name=COLLECTION_NAME,
-            query_vector=vector,
+            query=vector,
             limit=limit,
         )
-        return hits
+        return response.points
 
     def delete_document_chunks(self, document_id: str):
         # We would need to search for points with this document_id and delete them,
