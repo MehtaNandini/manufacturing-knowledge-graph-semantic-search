@@ -45,8 +45,17 @@ class VectorSearchClient:
         return response.points
 
     def delete_document_chunks(self, document_id: str):
-        # We would need to search for points with this document_id and delete them,
-        # or use qdrant payload filters to delete.
-        pass
+        from qdrant_client.http.models import Filter, FieldCondition, MatchValue
+        self.client.delete(
+            collection_name=COLLECTION_NAME,
+            points_selector=Filter(
+                must=[
+                    FieldCondition(
+                        key="document_id",
+                        match=MatchValue(value=document_id)
+                    )
+                ]
+            )
+        )
 
 vector_client = VectorSearchClient()

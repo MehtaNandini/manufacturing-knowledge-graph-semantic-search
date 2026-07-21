@@ -125,7 +125,13 @@ def delete_document(document_id: str, db: Session = Depends(get_db), current_use
     if doc.uploaded_by != current_user.id and current_user.role.value != "admin":
         raise HTTPException(status_code=403, detail="Not authorized")
         
-    # Vector DB cleanup would go here
+    # Vector DB cleanup
+    from ...search.qdrant import vector_client
+    try:
+        vector_client.delete_document_chunks(document_id)
+    except Exception as e:
+        print(f"Error cleaning up Qdrant for document {document_id}: {e}")
+        
     # Graph cleanup would go here
     
     db.delete(doc)
