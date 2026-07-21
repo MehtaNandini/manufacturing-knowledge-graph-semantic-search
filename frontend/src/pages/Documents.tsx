@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { UploadCloud } from 'lucide-react';
-import { fetchDocuments, uploadDocument } from '../services/api';
+import { fetchDocuments, uploadDocument, deleteDocument } from '../services/api';
 import type { Document } from '../types';
 
 export default function Documents() {
@@ -24,6 +24,16 @@ export default function Documents() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this document?")) return;
+    try {
+      await deleteDocument(id);
+      await loadDocuments();
+    } catch (err) {
+      alert("Failed to delete document.");
+    }
+  };
+
   const handleFileDrop = async (e: any) => {
     e.preventDefault();
     const file = e.dataTransfer?.files[0] || e.target?.files[0];
@@ -33,10 +43,15 @@ export default function Documents() {
     try {
       await uploadDocument(file);
       await loadDocuments();
-    } catch (err) {
-      alert("Failed to upload document");
+    } catch (err: any) {
+      if (err.response?.status === 409) {
+        alert("A document with this filename already exists. Please delete it first or rename the file.");
+      } else {
+        alert("Failed to upload document");
+      }
     } finally {
       setUploading(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -77,12 +92,13 @@ export default function Documents() {
               <th>Size</th>
               <th>Status</th>
               <th>Uploaded At</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            {loading && <tr><td colSpan={5} className="text-center">Loading documents...</td></tr>}
+            {loading && <tr><td colSpan={6} className="text-center">Loading documents...</td></tr>}
             {!loading && documents.length === 0 && (
-              <tr><td colSpan={5} className="text-center">No documents uploaded yet.</td></tr>
+              <tr><td colSpan={6} className="text-center">No documents uploaded yet.</td></tr>
             )}
             {documents.map((doc) => (
               <tr key={doc.id}>
@@ -95,6 +111,15 @@ export default function Documents() {
                   </span>
                 </td>
                 <td>{new Date(doc.uploaded_at).toLocaleString()}</td>
+                <td>
+                  <button 
+                    className="btn btn-outline" 
+                    style={{ padding: '0.25rem 0.5rem', color: '#e74c3c', borderColor: '#e74c3c' }}
+                    onClick={() => handleDelete(doc.id)}
+                  >
+                    Delete
+                  </button>
+                </td>
               </tr>
             ))}
           </tbody>

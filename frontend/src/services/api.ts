@@ -29,6 +29,10 @@ export const uploadDocument = async (file: File): Promise<Document> => {
   return data;
 };
 
+export const deleteDocument = async (id: string): Promise<void> => {
+  await api.delete(`/api/documents/${id}`);
+};
+
 export const fetchEntities = async (status?: string): Promise<ExtractedEntity[]> => {
   const url = status ? `/api/entities/?status=${status}` : '/api/entities/';
   const { data } = await api.get(url);
