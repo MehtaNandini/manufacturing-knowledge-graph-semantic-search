@@ -56,6 +56,11 @@ def approve_entity(entity_id: str, db: Session = Depends(get_db), current_user: 
     doc_uri = URIRef(f"http://example.org/manufacturing/document/{entity.document_id}")
     g.add((uri, MFG.describedIn, doc_uri))
     
+    # Insert document metadata so Graph Explorer shows a readable filename
+    if entity.document and entity.document.filename:
+        g.add((doc_uri, RDF.type, MFG["Document"]))
+        g.add((doc_uri, MFG.entityLabel, Literal(entity.document.filename, datatype=XSD.string)))
+    
     fuseki_client.insert_graph(g)
     
     return entity
