@@ -15,8 +15,8 @@ export default function Dashboard() {
         
         setStats({
           docs: docs.length,
-          pending: entities.filter((e: any) => e.status === 'pending').length,
-          approved: entities.filter((e: any) => e.status === 'approved').length,
+          pending: entities.filter((e: any) => e.status === 'PENDING' || e.status === 'pending').length,
+          approved: entities.filter((e: any) => e.status === 'APPROVED' || e.status === 'approved').length,
         });
       } catch (e) {
         console.error("Failed to load dashboard stats", e);
